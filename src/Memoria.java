@@ -9,13 +9,12 @@ public class Memoria {
         memoriaInstrucciones = new int[640];
 
         Arrays.fill(memoriaDatos, 1);
-        Arrays.fill(memoriaInstrucciones, 0);
     }
 
     public void fill(){
 
     }
-    
+
     /*
     public Bloque traeDatos(int direccion){
         int numeroBloque = direccion / 2;

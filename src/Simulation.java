@@ -1,19 +1,19 @@
 import java.util.concurrent.CyclicBarrier;
 
-public class Simulation{
+public class Simulation {
     private CyclicBarrier tick;
 
     Thread processor;
     Thread buffer;
 
     public Simulation(){
-        tick = new CyclicBarrier(2);
-        processor = new Thread(new Processor(tick));
-        buffer = new Thread(new VictimBuffer(tick));
+    	tick = new CyclicBarrier(2);
     }
 
     public void run(){
-        processor.start();
-        buffer.start();
+    	processor = new Thread(new Processor(tick));
+    	buffer = new Thread(new VictimBuffer(tick));
+    	processor.start();
+    	buffer.start();
     }
 }

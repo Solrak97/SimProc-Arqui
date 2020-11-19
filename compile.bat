@@ -1,2 +1,4 @@
 javac -source 1.8 -target 1.8 src\*.java -d bin
-java bin/Main
+cd bin
+java Main Gatto se la come
+cd ..
