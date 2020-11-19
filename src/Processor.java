@@ -1,4 +1,4 @@
-public class Procesador {
+public class Procesador extends Thread{
 
     int[] registros;
     int[] instruccion;
@@ -10,6 +10,12 @@ public class Procesador {
         instruccion = new int[4];
         pc = -1;
         rl = -1;
+    }
+
+    public void run(){
+        while(true){
+            System.out.println("toc");
+        }
     }
 
     void decodificar(){
@@ -55,5 +61,4 @@ public class Procesador {
                 break;
         }
     }
-
 }
