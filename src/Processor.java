@@ -1,23 +1,36 @@
-public class Procesador extends Thread{
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
-    int[] registros;
-    int[] instruccion;
+public class Processor implements Runnable{
+    CyclicBarrier tick;
+    int[] registers;
+    int[] instruction;
     int pc;
     int rl;
 
-    Procesador(){
-        registros = new int[32];
-        instruccion = new int[4];
+    Processor(CyclicBarrier tick){
+        this.tick = tick;
+        registers = new int[32];
+        instruction = new int[4];
         pc = -1;
         rl = -1;
     }
 
-    public void run(){
-        while(true){
+    @Override
+    public void run() {
+        while (true){
             System.out.println("toc");
+            try {
+                tick.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (BrokenBarrierException e) {
+                e.printStackTrace();
+            }
         }
     }
 
+    /*
     void decodificar(){
         switch(instruccion[0]){
             case 19: //addi
@@ -61,4 +74,5 @@ public class Procesador extends Thread{
                 break;
         }
     }
+        */
 }
