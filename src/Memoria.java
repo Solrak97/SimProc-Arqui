@@ -12,6 +12,10 @@ public class Memoria {
         Arrays.fill(memoriaInstrucciones, 0);
     }
 
+    public void fill(){
+
+    }
+    
     /*
     public Bloque traeDatos(int direccion){
         int numeroBloque = direccion / 2;

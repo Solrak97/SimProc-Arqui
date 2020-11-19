@@ -16,6 +16,10 @@ public class Processor implements Runnable{
         rl = -1;
     }
 
+    public void fetch(){
+      
+    }
+
     @Override
     public void run() {
         while (true){
