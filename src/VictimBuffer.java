@@ -21,13 +21,13 @@ public class VictimBuffer implements Runnable{
             }
         }
     }
-    /*
+
     LinkedList<Integer> ourBuffer = new LinkedList<Integer>();
     int numberOfBlocksInBuffer;
 
-
+    /*
     *   Insertamos bloque de dos palabras (mientras aún haya espacio)
-
+    */
     void insertInVictimBuffer(int newBlock){    //DUDA CON LUISK DE COMO IMPLEMENTÓ LA CLASE BLOQUE PARA EL INSER EN EL BUFFER
         if(8 > numberOfBlocksInBuffer){
             ourBuffer.addLast(newBlock);
@@ -35,14 +35,15 @@ public class VictimBuffer implements Runnable{
         }
     }
 
+    /*
     *   Extraemos bloque de dos palabras (mientras se pueda extraer)
-
+    */
     void extractFromVictimBuffer(){
         if(0 < numberOfBlocksInBuffer){
-            ourBuffer.removeLast();
+            ourBuffer.removeFirst();
             --numberOfBlocksInBuffer;
         }
     }
-*/
+
 
 }
