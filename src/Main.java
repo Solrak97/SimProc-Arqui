@@ -5,7 +5,7 @@ public class Main {
         System.out.println(s);
       }
 
-        Simulation simulation = new Simulation();
+        Simulation simulation = new Simulation(args);
         //simulation.run();
     }
 }
