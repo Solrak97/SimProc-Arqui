@@ -1,10 +1,18 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class ContextController {
-	LinkedList<Context> threadContext;
+	ArrayList<Context> threadContext;
 
 	public ContextController(){
-		threadContext = new LinkedList<Context>();
+		threadContext = new ArrayList<Context>();
+	}
+
+	public void addContext(Context context){
+		threadContext.add(context);
+	}
+
+	public void change(){
+
 	}
 }
 
@@ -16,9 +24,9 @@ class Context {
 	int[] registers;
 
 	public Context(int pc, int ir){
-		registers = new int[32];
 		this.pc = pc;
 		this.ir = ir;
 		this.rl = 0;
+		registers = new int[32];
 	}
 }

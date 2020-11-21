@@ -2,14 +2,14 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 public class Processor implements Runnable{
-    CyclicBarrier tick;
+    CyclicBarrier cycle;
     int[] registers;
     int[] instruction;
     int pc;
     int rl;
 
-    Processor(CyclicBarrier tick){
-        this.tick = tick;
+    Processor(CyclicBarrier cycle){
+        this.cycle = cycle;
         registers = new int[32];
         instruction = new int[4];
         pc = -1;
@@ -25,7 +25,7 @@ public class Processor implements Runnable{
         while (true){
             System.out.println("toc");
             try {
-                tick.await();
+                cycle.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (BrokenBarrierException e) {
