@@ -1,9 +1,17 @@
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
+import java.util.*;
 
 public class VictimBuffer implements Runnable{
     CyclicBarrier tick;
+    LinkedList<Integer> ourBuffer = new LinkedList<Integer>();
+    int numberOfBlocksInBuffer;
+    private int word1;
+    private int word2;
 
+    /*
+    *   This is the Buffer Constructor
+    */
     public VictimBuffer(CyclicBarrier tick){
         this.tick = tick;
     }
@@ -22,8 +30,8 @@ public class VictimBuffer implements Runnable{
         }
     }
 
-    LinkedList<Integer> ourBuffer = new LinkedList<Integer>();
-    int numberOfBlocksInBuffer;
+
+
 
     /*
     *   Insertamos bloque de dos palabras (mientras aún haya espacio)

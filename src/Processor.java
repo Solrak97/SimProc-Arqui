@@ -17,7 +17,7 @@ public class Processor implements Runnable{
     }
 
     public void fetch(){
-      
+
     }
 
     @Override
@@ -34,49 +34,124 @@ public class Processor implements Runnable{
         }
     }
 
-    /*
+    void addi(int x1, int x2, int n){
+        x1 = x2 + n;
+    }
+
+    void add(int x1, int x2, int x3){
+        x1 = x2 + x3;
+    }
+
+    void sub(int x1, int x2, int x3){
+        x1 = x2 - x3;
+    }
+
+    void mul(int x1, int x2, int x3){
+        x1 = x2 * x3;
+    }
+
+    void div(int x1, int x2, int x3){
+        x1 = x2 / x3;
+    }
+
+    void lw(int x1, int x2, int n){
+        //Carga desde memoria y escribe en el Buffer
+        //x1 <-- M[n + x2]
+    }
+
+    void sw(int x1, int x2, int n){
+        //Guarda en Memoria el valor x1
+        //M[n + x2] <-- x1
+    }
+
+    void beq(int x1, int x2, int etiq){
+        if(x1 == x2){
+            //pc += inm*4;
+            //pc += etiq * 4;
+        }
+    }
+
+    void bne(int x1, int x2, int etiq){
+        if(x1 != x2){
+            //pc += inm*4;
+            //pc += etiq * 4;
+        }
+    }
+
+    void lr(int x1, int x2){
+        //x1 = M[x2];
+        rl = x2;
+    }
+
+    void sc(int x1, int x2, int n){
+            if(rl == (n + x2)){
+                //M(n + x2) = x1;
+            }else{
+                x1 = 0;
+            }
+    }
+
+    void jal(int x1, int n){
+        x1 = pc;
+        pc = pc + n;
+    }
+
+    void jalr(int x1, int x2, int n){
+        x1 = pc;
+        pc = x2 + n;
+    }
+
+    void FIN(){
+        //we shoud end the program here
+        System.exit(0);     //I'm not really sure if this is an allwed expression
+    }
+
+
     void decodificar(){
         switch(instruccion[0]){
-            case 19: //addi
-                registros[instruccion[1]] = registros[instruccion[2]] + instruccion[3];
+            case 19:
+                addi(registros[instruccion[1]], registros[instruccion[2]], instruccion[3]);
                 break;
-            case 71:    //add
-                registros[instruccion[1]] = registros[instruccion[2]] + registros[instruccion[3]];
+            case 71:
+                add(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
-            case 83:    //sub
-                registros[instruccion[1]] = registros[instruccion[2]] - registros[instruccion[3]];
+            case 83:
+                sub(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
-            case 72:    //mul
-                registros[instruccion[1]] = registros[instruccion[2]] * registros[instruccion[3]];
+            case 72:
+                mul(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
-            case 56:    //div
-                registros[instruccion[1]] = registros[instruccion[2]] / registros[instruccion[3]];
+            case 56:
+                div(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
-            case 5:     //lw
+            case 5:
+                lw(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
-            case 37:    //sw
+            case 37:
+                sw(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
-            case 99:    //beq
-                if (registros[instruccion[1]] == registros[instruccion[2]]) pc += instruccion[3] * 4;
+            case 99:
+                beq(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
-            case 100:   //bne
-                if (registros[instruccion[1]] != registros[instruccion[2]]) pc += instruccion[3] * 4;
+            case 100:
+                bne(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
-            case 51:    //lr
+            case 51:
+                lr(registros[instruccion[1]], registros[instruccion[2]]);
                 break;
-            case 52:    //sc
+            case 52:
+                sc(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
-            case 111:   //jal
-                registros[1] = pc;
-                pc = pc + instruccion[3];
+            case 111:
+                jal(registros[instruccion[1]], registros[instruccion[3]]);
                 break;
-            case 183:   //jalr
-                registros[1] = pc;
-                pc = registros[2] + instruccion[3];
+            case 183:
+                jalr(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
-            case 999:   //FIN
+            case 999:
+                //FIN
                 break;
         }
     }
-        */
+
 }

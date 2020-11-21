@@ -2,10 +2,15 @@ import java.util.Arrays;
 
 
 public class Cache {
-    Bloque[] cache;
+    String Bloque[][];
+    String instructionsCache[][];
+    String dataCache[][];
 
     public Cache(){
-        cache = new Bloque[8];
+        Bloque = new int[4][4]; // Define que intArray almacenará 10 valores enteros
+        //String cache = new Bloque[4][4];
+        instructionsCache = new String[4][8];
+        dataCache = new String[4][4];
         Arrays.fill(cache, new Bloque());
     }
 
@@ -22,5 +27,7 @@ public class Cache {
     void cacheFailure(){
 
     }
+
+
 
 }
