@@ -2,10 +2,11 @@ import java.util.Arrays;
 
 
 public class Cache {
-    String Bloque[][];
+    int Bloque[][];
     String instructionsCache[][];
     String dataCache[][];
 
+/*
     public Cache(){
         Bloque = new int[4][4]; // Define que intArray almacenará 10 valores enteros
         //String cache = new Bloque[4][4];
@@ -13,6 +14,7 @@ public class Cache {
         dataCache = new String[4][4];
         Arrays.fill(cache, new Bloque());
     }
+*/
 
     /*
     *   Retorna la posición en que se encuentra un bloque en memoria

@@ -3,6 +3,7 @@ import java.io.*;
 
 public class Simulation {
     private CyclicBarrier cycle;
+	private Messenger messenger;
 
 	ContextController threadContext;
 	Memory sharedMemory;
@@ -10,6 +11,7 @@ public class Simulation {
     Thread buffer;
 
     public Simulation(String[] args){
+		messenger = new Messenger();
 		threadContext = new ContextController();
 		sharedMemory = new Memory();
 
@@ -58,8 +60,8 @@ public class Simulation {
 
     public void run(){
 
-    	processor = new Thread(new Processor(cycle));
-    	buffer = new Thread(new VictimBuffer(cycle));
+    	processor = new Thread(new Processor(cycle, messenger));
+    	buffer = new Thread(new VictimBuffer(cycle, messenger));
     	processor.start();
     	buffer.start();
     }
