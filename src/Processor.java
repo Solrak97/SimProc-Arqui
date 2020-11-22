@@ -3,25 +3,18 @@ import java.util.concurrent.CyclicBarrier;
 
 public class Processor implements Runnable{
     CyclicBarrier cycle;
-	Messenger messenger;
-	int quantum;
-
     int[] registers;
     int[] instruction;
     int pc;
     int rl;
 
-    Processor(CyclicBarrier cycle, Messenger messenger, ContextController context, int quantum){
+    Processor(CyclicBarrier cycle){
         this.cycle = cycle;
-		this.messenger = messenger;
-		this.quantum = quantum;
-
         registers = new int[32];
         instruction = new int[4];
         pc = -1;
         rl = -1;
     }
-
 
     public void fetch(){
 
@@ -29,14 +22,10 @@ public class Processor implements Runnable{
 
     @Override
     public void run() {
-		int i = 0;
-        while (i < 10){
-			i++;
-
+        while (true){
+            System.out.println("toc");
             try {
-
-				cycle.await();
-
+                cycle.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (BrokenBarrierException e) {
@@ -110,52 +99,51 @@ public class Processor implements Runnable{
         pc = x2 + n;
     }
 
-    void fin(){
-        //we shoud end the program here
-        System.exit(0);     //I'm not really sure if this is an allwed expression
+    void FIN(){
+        //This is the end of the thread
     }
 
 
-    void decoder(){
-        switch(instruction[0]){
+    void decodificar(){
+        switch(instruccion[0]){
             case 19:
-                addi(registers[instruction[1]], registers[instruction[2]], instruction[3]);
+                addi(registros[instruccion[1]], registros[instruccion[2]], instruccion[3]);
                 break;
             case 71:
-                add(registers[instruction[1]], registers[instruction[2]], registers[instruction[3]]);
+                add(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 83:
-                sub(registers[instruction[1]], registers[instruction[2]], registers[instruction[3]]);
+                sub(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 72:
-                mul(registers[instruction[1]], registers[instruction[2]], registers[instruction[3]]);
+                mul(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 56:
-                div(registers[instruction[1]], registers[instruction[2]], registers[instruction[3]]);
+                div(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 5:
-                lw(registers[instruction[1]], registers[instruction[2]], registers[instruction[3]]);
+                lw(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 37:
-                sw(registers[instruction[1]], registers[instruction[2]], registers[instruction[3]]);
+                sw(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 99:
-                beq(registers[instruction[1]], registers[instruction[2]], registers[instruction[3]]);
+                beq(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 100:
-                bne(registers[instruction[1]], registers[instruction[2]], registers[instruction[3]]);
+                bne(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 51:
-                lr(registers[instruction[1]], registers[instruction[2]]);
+                lr(registros[instruccion[1]], registros[instruccion[2]]);
                 break;
             case 52:
-                sc(registers[instruction[1]], registers[instruction[2]], registers[instruction[3]]);
+                sc(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 111:
-                jal(registers[instruction[1]], registers[instruction[3]]);
+                jal(registros[instruccion[1]], registros[instruccion[3]]);
                 break;
             case 183:
-                jalr(registers[instruction[1]], registers[instruction[2]], registers[instruction[3]]);
+                jalr(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 999:
                 fin();
