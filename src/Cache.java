@@ -3,26 +3,32 @@ import java.util.Arrays;
 
 public class Cache {
     String Bloque[][];
-    String instructionsCache[][];
-    String dataCache[][];
+    int instructionsCache[][];
+    String instructionsCacheStatus[];
+    int dataCache[][];
+    String dataCacheStatus[];
 
     public Cache(){
         Bloque = new int[4][4]; // Define que intArray almacenará 10 valores enteros
         //String cache = new Bloque[4][4];
-        instructionsCache = new String[4][8];
         Arrays.fill(cache, new Bloque());
-        instructionsCache = {   { "0", "0", "0", "0", "0", "0", "0", "0" },
-                                { "0", "0", "0", "0", "0", "0", "0", "0" },
-                                { "0", "0", "0", "0", "0", "0", "0", "0" },
-                                { "I", "I", "I", "I", "I", "I", "I", "I" }
+
+        instructionsCache = new int[2][8];
+        instructionsCache = {   { 0, 0, 0, 0, 0, 0, 0, 0 },
+                                { 0, 0, 0, 0, 0, 0, 0, 0 }
                             };
 
-        dataCache = new String[4][4];
-        dataCache =         {   { "0", "0", "0", "0" },
-                                { "0", "0", "0", "0" },
-                                { "0", "0", "0", "0" },
-                                { "I", "I", "I", "I" }
+        instructionsCacheStatus = new String[8];
+        instructionsCacheStatus =   { "I", "I", "I", "I", "I", "I", "I", "I" };
+
+        dataCache = new String[2][4];
+        dataCache =         {   { 0, 0, 0, 0 },
+                                { 0, 0, 0, 0 }
                             };
+
+        dataCacheStatus = new String[4];
+        dataCacheStatus = { "I", "I", "I", "I" };
+
     }
 
     /*
