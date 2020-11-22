@@ -67,14 +67,14 @@ public class Processor implements Runnable{
     void beq(int x1, int x2, int etiq){
         if(x1 == x2){
             //pc += inm*4;
-            //pc += etiq * 4;
+            pc += etiq * 4;
         }
     }
 
     void bne(int x1, int x2, int etiq){
         if(x1 != x2){
             //pc += inm*4;
-            //pc += etiq * 4;
+            pc += etiq * 4;
         }
     }
 
