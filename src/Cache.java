@@ -8,6 +8,7 @@ public class Cache {
     int dataCache[][];
     String dataCacheStatus[];
 
+/*
     public Cache(){
         Bloque = new int[4][4]; // Define que intArray almacenará 10 valores enteros
         //String cache = new Bloque[4][4];
@@ -30,6 +31,7 @@ public class Cache {
         dataCacheStatus = { "I", "I", "I", "I" };
 
     }
+*/
 
     /*
     *   Retorna la posición en que se encuentra un bloque en memoria

@@ -3,7 +3,9 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.*;
 
 public class VictimBuffer implements Runnable{
-    CyclicBarrier tick;
+    CyclicBarrier cycle;
+	Messenger messenger;
+
     LinkedList<Integer> ourBuffer = new LinkedList<Integer>();
     int numberOfBlocksInBuffer;
     private int word1;
@@ -12,16 +14,22 @@ public class VictimBuffer implements Runnable{
     /*
     *   This is the Buffer Constructor
     */
-    public VictimBuffer(CyclicBarrier tick){
-        this.tick = tick;
+    public VictimBuffer(CyclicBarrier cycle, Messenger messenger){
+        this.cycle = cycle;
+		this.messenger = messenger;
     }
 
     @Override
     public void run() {
-        while (true){
-            System.out.println("tic");
+		int i = 0;
+		messenger.setAvailableSpace(true);
+        while (i < 10){
+			i++;
+
             try {
-                tick.await();
+
+				cycle.await();
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (BrokenBarrierException e) {
@@ -29,7 +37,6 @@ public class VictimBuffer implements Runnable{
             }
         }
     }
-
 
 
 
