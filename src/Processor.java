@@ -57,6 +57,7 @@ public class Processor implements Runnable{
 
 	private void endOfCycle(){
 		try {
+			cycleCounter++;
 			cycle.await();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
