@@ -4,9 +4,9 @@ import java.util.Arrays;
 public class Cache {
     String Bloque[][];
     int instructionsCache[][];
-    String instructionsCacheStatus[];
+    char instructionsCacheStatus[];
     int dataCache[][];
-    String dataCacheStatus[];
+    char dataCacheStatus[];
 
     public Cache(){
         Bloque = new int[4][4]; // Define que intArray almacenará 10 valores enteros
@@ -18,16 +18,16 @@ public class Cache {
                                 { 0, 0, 0, 0, 0, 0, 0, 0 }
                             };
 
-        instructionsCacheStatus = new String[8];
-        instructionsCacheStatus =   { "I", "I", "I", "I", "I", "I", "I", "I" };
+        instructionsCacheStatus = new char[8];
+        instructionsCacheStatus =   { 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I' };
 
-        dataCache = new String[2][4];
+        dataCache = new int[2][4];
         dataCache =         {   { 0, 0, 0, 0 },
                                 { 0, 0, 0, 0 }
                             };
 
-        dataCacheStatus = new String[4];
-        dataCacheStatus = { "I", "I", "I", "I" };
+        dataCacheStatus = new char[4];
+        dataCacheStatus = { 'I', 'I', 'I', 'I' };
 
     }
 
@@ -41,17 +41,23 @@ public class Cache {
     /*
     *   It w
     */
-    void cacheWhenStore(){
-        //escribimos el valor en la cache
-        //status = C
+    void cacheWhenStore(int value, int wordNumber, int blockNumber, boolean failureStatus){
+        dataCache[wordNumber][blockNumber] = value;
+        dataCacheStatus[blockNumber] = "C";
     }
 
     /*
     *   It w
     */
-    void cacheWhenModification(){
-        //escribimos el valor en la cache
-        //status = M
+    void cacheWhenModification(int value, int wordNumber, int blockNumber, boolean failureStatus){
+        dataCache[wordNumber][blockNumber] = value;
+        dataCacheStatus[blockNumber] = "M";
+    }
+
+    boolean cacheFailure(){
+        boolean failureStatus = false;
+        //condición de fallo de caché
+        return(failureStatus);
     }
 
 }
