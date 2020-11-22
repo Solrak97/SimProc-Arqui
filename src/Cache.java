@@ -10,8 +10,19 @@ public class Cache {
         Bloque = new int[4][4]; // Define que intArray almacenará 10 valores enteros
         //String cache = new Bloque[4][4];
         instructionsCache = new String[4][8];
-        dataCache = new String[4][4];
         Arrays.fill(cache, new Bloque());
+        instructionsCache = {   { "0", "0", "0", "0", "0", "0", "0", "0" },
+                                { "0", "0", "0", "0", "0", "0", "0", "0" },
+                                { "0", "0", "0", "0", "0", "0", "0", "0" },
+                                { "I", "I", "I", "I", "I", "I", "I", "I" }
+                            };
+
+        dataCache = new String[4][4];
+        dataCache =         {   { "0", "0", "0", "0" },
+                                { "0", "0", "0", "0" },
+                                { "0", "0", "0", "0" },
+                                { "I", "I", "I", "I" }
+                            };
     }
 
     /*
@@ -22,12 +33,19 @@ public class Cache {
     }
 
     /*
-    *   It works with the cache failure monitoring
+    *   It w
     */
-    void cacheFailure(){
-
+    void cacheWhenStore(){
+        //escribimos el valor en la cache
+        //status = C
     }
 
-
+    /*
+    *   It w
+    */
+    void cacheWhenModification(){
+        //escribimos el valor en la cache
+        //status = M
+    }
 
 }
