@@ -4,15 +4,17 @@ import java.util.concurrent.CyclicBarrier;
 public class Processor implements Runnable{
     CyclicBarrier cycle;
 	Messenger messenger;
+	int quantum;
 
     int[] registers;
     int[] instruction;
     int pc;
     int rl;
 
-    Processor(CyclicBarrier cycle, Messenger messenger, ContextController context){
+    Processor(CyclicBarrier cycle, Messenger messenger, ContextController context, int quantum){
         this.cycle = cycle;
 		this.messenger = messenger;
+		this.quantum = quantum;
 
         registers = new int[32];
         instruction = new int[4];
