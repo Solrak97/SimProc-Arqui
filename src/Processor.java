@@ -75,14 +75,12 @@ public class Processor implements Runnable{
 
     void beq(int x1, int x2, int etiq){
         if(x1 == x2){
-            //pc += inm*4;
             pc += etiq * 4;
         }
     }
 
     void bne(int x1, int x2, int etiq){
         if(x1 != x2){
-            //pc += inm*4;
             pc += etiq * 4;
         }
     }
@@ -158,7 +156,7 @@ public class Processor implements Runnable{
                 jalr(registers[instruction[1]], registers[instruction[2]], registers[instruction[3]]);
                 break;
             case 999:
-                //FIN
+                fin();
                 break;
         }
     }
