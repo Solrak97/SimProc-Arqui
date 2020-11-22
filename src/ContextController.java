@@ -11,22 +11,28 @@ public class ContextController {
 		threadContext.add(context);
 	}
 
-	public void change(){
-
+	public void check(){
+		for(Context c: threadContext){
+			System.out.println(c.pc);
+		}
 	}
 }
 
 class Context {
 	int pc;
-	int ir;
 	int rl;
 
 	int[] registers;
 
-	public Context(int pc, int ir){
+	public Context(int pc){
 		this.pc = pc;
-		this.ir = ir;
 		this.rl = 0;
 		registers = new int[32];
+	}
+
+	public void CopyContext(int pc, int rl, int[] regs){
+		this.pc = pc;
+		this.rl = rl;
+		this.registers = regs;
 	}
 }

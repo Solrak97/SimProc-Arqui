@@ -10,7 +10,7 @@ public class Processor implements Runnable{
     int pc;
     int rl;
 
-    Processor(CyclicBarrier cycle, Messenger messenger){
+    Processor(CyclicBarrier cycle, Messenger messenger, ContextController context){
         this.cycle = cycle;
 		this.messenger = messenger;
 
@@ -108,7 +108,7 @@ public class Processor implements Runnable{
         pc = x2 + n;
     }
 
-    void FIN(){
+    void fin(){
         //we shoud end the program here
         System.exit(0);     //I'm not really sure if this is an allwed expression
     }

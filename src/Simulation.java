@@ -17,9 +17,6 @@ public class Simulation {
 
 		File[] threadFiles = getThreadFiles(args);
 		loadThreads(threadFiles, sharedMemory, threadContext);
-
-		sharedMemory.check();
-
     	cycle = new CyclicBarrier(2);
     }
 
@@ -32,6 +29,7 @@ public class Simulation {
 		int memIndex = 0;
 
 		for(File f: threadFiles){
+			context.addContext(new Context(memIndex));
 			try{
 				fr = new FileReader(f);
 				br = new BufferedReader(fr);
@@ -60,7 +58,7 @@ public class Simulation {
 
     public void run(){
 
-    	processor = new Thread(new Processor(cycle, messenger));
+    	processor = new Thread(new Processor(cycle, messenger, threadContext));
     	buffer = new Thread(new VictimBuffer(cycle, messenger));
     	processor.start();
     	buffer.start();

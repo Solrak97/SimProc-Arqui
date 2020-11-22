@@ -15,8 +15,8 @@ public class Messenger{
 		processorMessages = new LinkedList<Integer>();
 	}
 
-	public synchronized void isBussy(){
-		return (!bufferMessages.isEmpty() && !processorMessages.isEmpty());
+	public synchronized boolean isBussy(){
+		return !bufferMessages.isEmpty() && !processorMessages.isEmpty();
 	}
 
 	public synchronized void setAvailableSpace(boolean space){
@@ -32,18 +32,10 @@ public class Messenger{
 	}
 
 	public synchronized int getProcessorMessage(){
-		int message = null;
-		if(!processorMessages.isEmpty()){
-			message = processMessages.getFirst();
-		}
-		return message;
+		return processorMessages.getFirst();
 	}
 
 	public synchronized int getBufferMessage(){
-		int message = null;
-		if(!bufferMessages.isEmpty()){
-			message = bufferMessages.getFirst();
-		}
-		return message;
+		return bufferMessages.getFirst();
 	}
 }
