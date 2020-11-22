@@ -23,20 +23,21 @@ public class BufferMessenger{
 		return blockInBuffer;
 	}
 
-	public synchronized void copyCacheToMessenger(){
-		
+	public synchronized void copyCacheToMessenger(int block){
+		copyToBufferInProgress = true;
+		copyBlock = block;
 	}
 
-	public synchronized void copyMessengerToCache(){
-
+	public synchronized int copyMessengerToCache(){
+		copyToCacheInProgress = false;
 	}
 
 	public synchronized void copyBufferToMessenger(){
-
+		copyToBufferInProgress = true;
 	}
 
-	public synchronized void copyMessengerToBuffer(){
-
+	public synchronized int copyMessengerToBuffer(){
+		copyToCacheInProgress = false;
 	}
 
 }
