@@ -11,6 +11,10 @@ public class ContextController {
 		threadContext.add(context);
 	}
 
+	public boolean isEmpty(){
+		return threadContext.isEmpty();
+	}
+
 	public void check(){
 		for(Context c: threadContext){
 			System.out.println(c.pc);

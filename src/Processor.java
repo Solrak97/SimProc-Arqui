@@ -2,37 +2,70 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 public class Processor implements Runnable{
-    CyclicBarrier cycle;
-    int[] registers;
+//Shared variables
+	CyclicBarrier cycle;
+	Messenger messenger;
+
+//Paramterized variables
+	ContextController context;
+	int quantum;
+
+//Simulation stats
+	int cycleCounter;
+
+//Simulated variables
+	Cache dataCache;
+	Cache instructionCache;
+
+	int[] registers;
     int[] instruction;
     int pc;
     int rl;
 
-    Processor(CyclicBarrier cycle){
+
+//Consructor
+    Processor(CyclicBarrier cycle, Messenger messenger, ContextController context, int quantum){
         this.cycle = cycle;
+		this.messenger = messenger;
+		this.context = context;
+		this.quantum = quantum;
+		this.cycleCounter = 0;
+
         registers = new int[32];
         instruction = new int[4];
         pc = -1;
         rl = -1;
     }
 
+
+//Thread Runnable
+	@Override
+	public void run() {
+		while (!context.isEmpty()){
+
+			endOfCycle();
+		}
+	}
+
+
+
+
+
     public void fetch(){
 
     }
 
-    @Override
-    public void run() {
-        while (true){
-            System.out.println("toc");
-            try {
-                cycle.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (BrokenBarrierException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+	private void endOfCycle(){
+		try {
+			cycle.await();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (BrokenBarrierException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 
     void addi(int x1, int x2, int n){
         x1 = x2 + n;
@@ -99,11 +132,12 @@ public class Processor implements Runnable{
         pc = x2 + n;
     }
 
-    void FIN(){
+    void fin(){
         //This is the end of the thread
     }
 
 
+/*
     void decodificar(){
         switch(instruccion[0]){
             case 19:
@@ -150,5 +184,5 @@ public class Processor implements Runnable{
                 break;
         }
     }
-
+*/
 }
