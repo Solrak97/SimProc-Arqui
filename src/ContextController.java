@@ -8,7 +8,7 @@ public class ContextController {
 
 	public ContextController(){
 		threadContext = new ArrayList<Context>();
-		contextIterator = new threadContext.Iterator();
+		contextIterator = threadContext.iterator();
 	}
 
 	public void addContext(Context context){
@@ -28,7 +28,7 @@ public class ContextController {
 			success = true;
 		}
 		else if (!threadContext.isEmpty()){
-			contextIterator = new threadContext.Iterator();
+			contextIterator = threadContext.iterator();
 			success = true;
 		}
 		else{
