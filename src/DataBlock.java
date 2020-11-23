@@ -7,4 +7,5 @@ public class DataBlock extends Block{
 		words[1] = w1;
 		words[2] = w2;
 	}
+
 }
