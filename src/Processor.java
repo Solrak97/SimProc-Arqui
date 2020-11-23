@@ -44,13 +44,12 @@ public class Processor implements Runnable{
 //Thread Runnable
 	@Override
 	public void run() {
-		int i = 0;
-		while (i < 10){
+		while (context.isValid()){
 			for(int q = 0; q < quantum; q++){
-				context.nextContext();
-				endOfCycle();
+				System.out.println("Cambios de contexto: " + context.getContext().pc);
 			}
-			i++;
+			context.nextContext();
+			endOfCycle();
 		}
 
 		System.out.print("Total de ciclos en Procesador: " + cycleCounter + "\n\n" +

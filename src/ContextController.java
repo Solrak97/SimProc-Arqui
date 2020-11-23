@@ -2,13 +2,13 @@ import java.util.ArrayList;
 import java.util.*;
 
 public class ContextController {
+	int index;
 	ArrayList<Context> threadContext;
 
-	Iterator<Context> contextIterator;
 
 	public ContextController(){
 		threadContext = new ArrayList<Context>();
-		contextIterator = threadContext.iterator();
+		index = 0;
 	}
 
 	public void addContext(Context context){
@@ -21,43 +21,58 @@ public class ContextController {
 		}
 	}
 
+	public boolean isValid(){
+		boolean isValid = false;
+		for(Context context: threadContext){
+			if(context.isValid){
+				isValid = true;
+			}
+		}
+		return isValid;
+	}
+
 	public boolean nextContext(){
-		boolean success;
-		if(contextIterator.hasNext()){
-			System.out.print("W1" );
-			contextIterator.next();
+		boolean success = false;
+		if(isValid()){
+			index++;
+			while(!getContext().isValid()){
+				index++;
+			}
 			success = true;
 		}
-		else if (!threadContext.isEmpty()){
-			System.out.print("W2" );
-			contextIterator = threadContext.iterator();
-			success = true;
-		}
-		else{
-			System.out.print("W3" );
-			success = false;
-		}
-		System.out.print("Iteracion de contexto" );
 		return success;
 	}
 
-	public void copyContext(int pc, int rl, int[] registers){
-		//contextIterator.pc = pc;
-		//contextIterator.rl = rl;
-		//contextIterator.registers = registers;
+	public Context getContext(){
+		return threadContext.get(index % threadContext.size());
+	}
+
+	public void markAsInvalid(){
+		getContext().isValid = false;
+	}
+
+	public void copyToContext(int pc, int rl, int[] registers){
+		getContext().pc = pc;
+		getContext().rl = rl;
+		getContext().registers = registers;
 	}
 }
 
 class Context {
+	boolean isValid;
 	int pc;
 	int rl;
-
 	int[] registers;
 
 	public Context(int pc){
+		isValid = true;
 		this.pc = pc;
 		this.rl = 0;
 		registers = new int[32];
+	}
+
+	public boolean isValid(){
+		return isValid;
 	}
 
 	public void CopyContext(int pc, int rl, int[] regs){
