@@ -11,7 +11,7 @@ public class Cache {
 	InstructionBlock instructionCache[];
 	Memory sharedMemory;
 	Messenger messenger;
-	Queue<String> cacheIndexQueue;
+	Queue<Integer> cacheIndexQueue;
 
 
     public Cache(Memory sharedMemory, Messenger messenger){
@@ -20,16 +20,15 @@ public class Cache {
 		indexQueue = new LinkedList<>();		//PriorityQueue<>();
 		this.sharedMemory = sharedMemory;
 		this.messenger = messenger;
-		int indexAmount;
     }
 
 	void cacheMaping(int cacheIndex){
 		if(indexAmount < 4){
-			indexQueue.add(cacheIndex);
+			indexQueue.addLast(cacheIndex);
 		}else if (indexAmount == 4) {
 			int toBuffer = indexQueue.peek();
 			indexQueue.remove();
-			indexQueue.add(cacheIndex);
+			indexQueue.addLast(cacheIndex);
 		}
 	}
 
