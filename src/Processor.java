@@ -37,7 +37,7 @@ public class Processor implements Runnable{
         instruction = new int[4];
         pc = -1;
         rl = -1;
-		cache = new Cache(sharedMemory);
+		cache = new Cache(sharedMemory, messenger);
     }
 
 
