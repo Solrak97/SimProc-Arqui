@@ -5,10 +5,12 @@ public class Cache {
 
 	DataBlock dataCache[];
 	InstructionBlock instructionCache[];
+	Memory sharedMemory;
 
-    public Cache(){
+    public Cache(Memory sharedMemory){
 		dataCache = new DataBlock[4];
 		instructionCache = new InstructionBlock[8];
+		this.sharedMemory = new Memory();
     }
 
     /*

@@ -5,6 +5,7 @@ public class Processor implements Runnable{
 //Shared variables
 	CyclicBarrier cycle;
 	Messenger messenger;
+	Memory sharedMemory;
 
 //Paramterized variables
 	ContextController context;
@@ -21,33 +22,44 @@ public class Processor implements Runnable{
     int[] instruction;
     int pc;
     int rl;
-
+	Cache cache;
 
 //Consructor
-    Processor(CyclicBarrier cycle, Messenger messenger, ContextController context, int quantum){
+    Processor(CyclicBarrier cycle, Messenger messenger, ContextController context, int quantum, Memory sharedMemory){
         this.cycle = cycle;
 		this.messenger = messenger;
 		this.context = context;
 		this.quantum = quantum;
 		this.cycleCounter = 0;
+		this.sharedMemory = sharedMemory;
 
         registers = new int[32];
         instruction = new int[4];
         pc = -1;
         rl = -1;
+		cache = new Cache(sharedMemory);
     }
 
 
 //Thread Runnable
 	@Override
 	public void run() {
-		while (!context.isEmpty()){
-
-			endOfCycle();
+		int i = 0;
+		while (i < 10){
+			for(int q = 0; q < quantum; q++){
+				context.nextContext();
+				endOfCycle();
+			}
+			i++;
 		}
+
+		System.out.print("Total de ciclos en Procesador: " + cycleCounter + "\n\n" +
+		"______________________________________________________\n\n\n");
 	}
 
+	public void loadContext(){
 
+	}
 
 
 

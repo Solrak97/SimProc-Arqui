@@ -13,7 +13,7 @@ public class Memory {
 
 	public void check(){
 		int index = 0;
-		System.out.print("\n\nInstruction Memory Content\n");
+		System.out.print("\n\nContenido de memoria de instrucciones\n");
 		System.out.print("______________________________________________________\n\n");
 		for(int i = 0; i < 32; i++){
 			for (int j = 0; j < 20; j++){

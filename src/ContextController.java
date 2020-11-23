@@ -21,26 +21,30 @@ public class ContextController {
 		}
 	}
 
-	public boolean nexContext(){
+	public boolean nextContext(){
 		boolean success;
 		if(contextIterator.hasNext()){
+			System.out.print("W1" );
 			contextIterator.next();
 			success = true;
 		}
 		else if (!threadContext.isEmpty()){
+			System.out.print("W2" );
 			contextIterator = threadContext.iterator();
 			success = true;
 		}
 		else{
+			System.out.print("W3" );
 			success = false;
 		}
+		System.out.print("Iteracion de contexto" );
 		return success;
 	}
 
 	public void copyContext(int pc, int rl, int[] registers){
-		contextIterator.pc = pc;
-		contextIterator.rl = rl;
-		contextIterator.registers = registers;
+		//contextIterator.pc = pc;
+		//contextIterator.rl = rl;
+		//contextIterator.registers = registers;
 	}
 }
 

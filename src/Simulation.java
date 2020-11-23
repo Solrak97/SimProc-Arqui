@@ -20,7 +20,6 @@ public class Simulation {
 		File[] threadFiles = getThreadFiles(args);
 		loadThreads(threadFiles, sharedMemory, threadContext);
 
-		sharedMemory.check();
     	cycle = new CyclicBarrier(2);
     }
 
@@ -60,11 +59,29 @@ public class Simulation {
 		return threadList;
 	}
 
-    public void run(){
-
-    	processor = new Thread(new Processor(cycle, messenger, threadContext, quantum));
+    public void run() {
+    	processor = new Thread(new Processor(cycle, messenger, threadContext, quantum, sharedMemory));
     	buffer = new Thread(new VictimBuffer(cycle, messenger));
-    	processor.start();
+
+//Simulation init
+
+System.out.print("______________________________________________________\n\n\n" +
+"Inicio de la simulacion:\n\n" +
+"______________________________________________________\n\n\n");
+		processor.start();
     	buffer.start();
+
+		try {
+//Simulation end
+			processor.join();
+			buffer.join();
+
+		} catch (InterruptedException e) {
+  			Thread.currentThread().interrupt();
+  			throw new AssertionError(e);
+		}
+
+//Stats
+		sharedMemory.check();
     }
 }

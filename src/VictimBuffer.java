@@ -6,6 +6,9 @@ public class VictimBuffer implements Runnable{
     CyclicBarrier cycle;
 	Messenger messenger;
 
+	//Simulation stats
+	int cycleCounter;
+
     LinkedList<Integer> ourBuffer = new LinkedList<Integer>();
     int numberOfBlocksInBuffer;
     private int word1;
@@ -17,27 +20,34 @@ public class VictimBuffer implements Runnable{
     public VictimBuffer(CyclicBarrier cycle, Messenger messenger){
         this.cycle = cycle;
 		this.messenger = messenger;
+		this.cycleCounter = 0;
     }
 
     @Override
     public void run() {
 		int i = 0;
 		messenger.setAvailableSpace(true);
-        while (i < 10){
+        while (i < 100){
 			i++;
-
-            try {
-
-				cycle.await();
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (BrokenBarrierException e) {
-                e.printStackTrace();
-            }
+			
+			endOfCycle();
         }
+		System.out.print("Total de ciclos en Buffer: " + cycleCounter + "\n\n" +
+		"______________________________________________________\n\n\n");
     }
 
+
+
+	private void endOfCycle(){
+		try {
+			cycleCounter++;
+			cycle.await();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (BrokenBarrierException e) {
+			e.printStackTrace();
+		}
+	}
 
 
     /*
