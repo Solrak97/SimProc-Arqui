@@ -1,6 +1,8 @@
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
+import DataBlock.java
+import InstructionBlock.java
 
 //jaja un cambio
 
@@ -11,69 +13,30 @@ public class Cache {
 	Memory sharedMemory;
 	Messenger messenger;
 	Queue<Integer> indexQueue;
-
-
+	int indexAmount;
 
     public Cache(Memory sharedMemory, Messenger messenger){
 		dataCache = new DataBlock[4];
 		instructionCache = new InstructionBlock[8];
-		indexQueue = new LinkedList<>();
+		indexQueue = new LinkedList<>();		//PriorityQueue<>();
 		this.sharedMemory = sharedMemory;
 		this.messenger = messenger;
     }
 
-
-	public int[] loadInstruction(){
-		int sopa[] = new int[4];
-		return sopa;
+	void cacheMaping(int cacheIndex){
+		if(indexQueue.size() < 4){
+			indexQueue.addLast(cacheIndex);
+		}else if(indexQueue.size() == 4){
+			int toBuffer = indexQueue.peek();
+			indexQueue.remove();
+			indexQueue.addLast(cacheIndex);
+		}
 	}
 
-	public void storeInstruction(){
+    int blockAddress(int memoryAddress, int blockSize){
+      return(memoryAddress / blockSize);
+    }
 
-	}
-
-	public int loadData(){
-		int sopa = 0;
-		return sopa;
-	}
-
-	public void storeData(){
-
-	}
-
-	void getInstructionBlockFromMemory(int memoryAddress){
-		int initialIndex = blockAddress(memoryAddress, 8) * 8;
-		int word1[];
-		int word2[];
-
-		return new InstructionBlock();
-	}
-
-	int blockAddress(int memoryAddress, int blockSize){
-		int blockNumber = (memoryAddress / blockSize);
-		return blockNumber;
-	}
-
-/*
-void cacheMaping(int cacheIndex){
-	if(indexQueue.size() < 4){
-		indexQueue.add(cacheIndex);
-	}else if (indexAmount == 4) {
-		//buffer es temporal para enviar al buffer
-		int toBuffer = indexQueue.remove();
-		indexQueue.add(cacheIndex);
-	}
-}
-
-
-
-	public int blockAddress(int address, int MemorySize, int wordSize){
-
-	}
-
-	public int wordAdress(int address){
-
-	}
 
 	void cacheWhenStore(int wordNumber1, int wordNumber2, int blockNumber, boolean failureStatus){
 		if(!failureStatus){
@@ -99,7 +62,5 @@ void cacheMaping(int cacheIndex){
 	boolean getWord(int word){
 		return(true); //(this.__ )
 	}
-
-	*/
 
 }
