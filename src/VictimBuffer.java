@@ -1,13 +1,11 @@
-import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.*;
 
 public class VictimBuffer implements Runnable{
-    CyclicBarrier cycle;
 	Messenger messenger;
 
 	//Simulation stats
-	int cycleCounter;
+	Cycler cycler;
 
     LinkedList<Integer> ourBuffer = new LinkedList<Integer>();
     int numberOfBlocksInBuffer;
@@ -18,32 +16,25 @@ public class VictimBuffer implements Runnable{
     *   This is the Buffer Constructor
     */
     public VictimBuffer(CyclicBarrier cycle, Messenger messenger){
-        this.cycle = cycle;
+        this.cycler = new Cycler(cycle);
 		this.messenger = messenger;
-		this.cycleCounter = 0;
     }
 
     @Override
     public void run() {
 		messenger.setAvailableSpace(true);
-        while (true){
-			endOfCycle();
+        while (!messenger.isOver()){
+			cycler.nextCycle();
         }
-		System.out.print("Total de ciclos en Buffer: " + cycleCounter + "\n\n" +
+
+		finishExecution();
+
+		System.out.print("Total de ciclos en Buffer: " + cycler.getCycles() + "\n\n" +
 		"______________________________________________________\n\n\n");
     }
 
-
-
-	private void endOfCycle(){
-		try {
-			cycleCounter++;
-			cycle.await();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (BrokenBarrierException e) {
-			e.printStackTrace();
-		}
+	void finishExecution(){
+		Thread.currentThread().interrupt();
 	}
 
 

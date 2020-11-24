@@ -1,9 +1,8 @@
-import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
+
 
 public class Processor implements Runnable{
 //Shared variables
-	CyclicBarrier cycle;
 	Messenger messenger;
 	Memory sharedMemory;
 
@@ -12,32 +11,30 @@ public class Processor implements Runnable{
 	int quantum;
 
 //Simulation stats
-	int cycleCounter;
+	Cycler cycler;
 
 //Simulated variables
-	Cache dataCache;
-	Cache instructionCache;
-
 	int[] registers;
     int[] instruction;
     int pc;
     int rl;
 	Cache cache;
+	boolean threadOver;
 
 //Consructor
     Processor(CyclicBarrier cycle, Messenger messenger, ContextController context, int quantum, Memory sharedMemory){
-        this.cycle = cycle;
+        this.cycler = new Cycler(cycle);
 		this.messenger = messenger;
 		this.context = context;
 		this.quantum = quantum;
-		this.cycleCounter = 0;
 		this.sharedMemory = sharedMemory;
-
         registers = new int[32];
         instruction = new int[4];
         pc = -1;
         rl = -1;
-		cache = new Cache(sharedMemory, messenger);
+
+		threadOver = false;
+		cache = new Cache(sharedMemory, messenger, cycler);
     }
 
 
@@ -45,37 +42,47 @@ public class Processor implements Runnable{
 	@Override
 	public void run() {
 		while (context.isValid()){
+
+			loadContext();
+
 			for(int q = 0; q < quantum; q++){
-				System.out.println("Cambios de contexto: " + context.getContext().pc);
+				if(!threadOver){
+					instruction = cache.loadInstruction(pc);
+					decoder();
+					pc += 4;
+				}
+				cycler.nextCycle();
 			}
+
+			context.saveContext(pc, rl, registers);
 			context.nextContext();
-			endOfCycle();
+			cycler.nextCycle();
 		}
 
-		System.out.print("Total de ciclos en Procesador: " + cycleCounter + "\n\n" +
+		killProgram();
+
+		System.out.print("Total de ciclos en Procesador: " + cycler.getCycles() + "\n\n" +
 		"______________________________________________________\n\n\n");
 	}
 
-	public void loadContext(){
-
+	void loadContext(){
+		threadOver = false;
+		Context actualContext = context.getContext();
+		this.pc = actualContext.pc;
+		this.rl = actualContext.rl;
+		this.registers = actualContext.registers;
 	}
 
-
+	void killProgram(){
+		messenger.finish();
+		cycler.nextCycle();
+		Thread.currentThread().interrupt();
+	}
 
     public void fetch(){
 
     }
 
-	private void endOfCycle(){
-		try {
-			cycleCounter++;
-			cycle.await();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (BrokenBarrierException e) {
-			e.printStackTrace();
-		}
-	}
 
 
 
@@ -145,56 +152,57 @@ public class Processor implements Runnable{
     }
 
     void fin(){
-        //This is the end of the thread
+		threadOver = true;
+        context.markAsInvalid();
     }
 
 
-/*
-    void decodificar(){
-        switch(instruccion[0]){
+
+    void decoder(){
+        switch(instruction[0]){
             case 19:
-                addi(registros[instruccion[1]], registros[instruccion[2]], instruccion[3]);
+                //addi(registros[instruccion[1]], registros[instruccion[2]], instruccion[3]);
                 break;
             case 71:
-                add(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+                //add(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 83:
-                sub(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+                //sub(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 72:
-                mul(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+                //mul(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 56:
-                div(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+                //div(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 5:
-                lw(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+                //lw(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 37:
-                sw(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+                //sw(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 99:
-                beq(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+                //beq(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 100:
-                bne(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+                //bne(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 51:
-                lr(registros[instruccion[1]], registros[instruccion[2]]);
+                //lr(registros[instruccion[1]], registros[instruccion[2]]);
                 break;
             case 52:
-                sc(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+                //sc(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 111:
-                jal(registros[instruccion[1]], registros[instruccion[3]]);
+                //jal(registros[instruccion[1]], registros[instruccion[3]]);
                 break;
             case 183:
-                jalr(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+                //jalr(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
                 break;
             case 999:
                 fin();
                 break;
         }
     }
-*/
+
 }

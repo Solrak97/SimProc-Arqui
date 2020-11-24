@@ -3,6 +3,7 @@ import java.util.LinkedList;
 public class Messenger{
 	boolean availableSpace;
 	boolean isBussy;
+	boolean isOver;
 	LinkedList<DataBlock> processorMessages;
 	LinkedList<DataBlock> bufferMessages;
 
@@ -10,9 +11,17 @@ public class Messenger{
 	public Messenger(){
 		availableSpace = false;
 		isBussy = false;
-
+		isOver = false;
 		bufferMessages = new LinkedList<DataBlock>();
 		processorMessages = new LinkedList<DataBlock>();
+	}
+
+	public synchronized void finish(){
+		isOver = true;
+	}
+
+	public synchronized boolean isOver(){
+		return isOver;
 	}
 
 	public synchronized boolean isBussy(){

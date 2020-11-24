@@ -51,10 +51,8 @@ public class ContextController {
 		getContext().isValid = false;
 	}
 
-	public void copyToContext(int pc, int rl, int[] registers){
-		getContext().pc = pc;
-		getContext().rl = rl;
-		getContext().registers = registers;
+	public void saveContext(int pc, int rl, int[] registers){
+		getContext().CopyContext(pc, rl, registers);
 	}
 }
 
