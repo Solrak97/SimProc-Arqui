@@ -1,28 +1,24 @@
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
-import DataBlock.java
-import InstructionBlock.java
 
-//jaja un cambio
 
 public class Cache {
-
 	DataBlock dataCache[];
 	InstructionBlock instructionCache[];
 	Memory sharedMemory;
 	Messenger messenger;
 	Queue<Integer> indexQueue;
-	int indexAmount;
 
     public Cache(Memory sharedMemory, Messenger messenger){
 		dataCache = new DataBlock[4];
 		instructionCache = new InstructionBlock[8];
-		indexQueue = new LinkedList<>();		//PriorityQueue<>();
+		indexQueue = new LinkedList<>();
 		this.sharedMemory = sharedMemory;
 		this.messenger = messenger;
     }
 
+/*
 	void cacheMaping(int cacheIndex){
 		if(indexQueue.size() < 4){
 			indexQueue.addLast(cacheIndex);
@@ -31,6 +27,34 @@ public class Cache {
 			indexQueue.remove();
 			indexQueue.addLast(cacheIndex);
 		}
+	}
+
+*/
+
+	public int[] loadInstruction(){
+		int sopa[] = new int[4];
+		return sopa;
+	}
+
+	public void storeInstruction(){
+
+	}
+
+	public int loadData(){
+		int sopa = 0;
+		return sopa;
+	}
+
+	public void storeData(){
+
+	}
+
+	void getInstructionBlockFromMemory(int memoryAddress){
+		int initialIndex = blockAddress(memoryAddress, 8) * 8;
+		int word1[];
+		int word2[];
+
+		return new InstructionBlock();
 	}
 
     int blockAddress(int memoryAddress, int blockSize){
