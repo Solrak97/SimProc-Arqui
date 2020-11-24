@@ -3,16 +3,16 @@ import java.util.LinkedList;
 public class Messenger{
 	boolean availableSpace;
 	boolean isBussy;
-	LinkedList<Integer> processorMessages;
-	LinkedList<Integer> bufferMessages;
+	LinkedList<DataBlock> processorMessages;
+	LinkedList<DataBlock> bufferMessages;
 
 
 	public Messenger(){
 		availableSpace = false;
 		isBussy = false;
 
-		bufferMessages = new LinkedList<Integer>();
-		processorMessages = new LinkedList<Integer>();
+		bufferMessages = new LinkedList<DataBlock>();
+		processorMessages = new LinkedList<DataBlock>();
 	}
 
 	public synchronized boolean isBussy(){
@@ -23,19 +23,19 @@ public class Messenger{
 		availableSpace = space;
 	}
 
-	public synchronized void sendProcessorMessage(int element){
-		processorMessages.addLast(element);
+	public synchronized void sendProcessorMessage(DataBlock block){
+		processorMessages.addLast(block);
 	}
 
-	public synchronized void sendBufferMessage(int element){
-		bufferMessages.addLast(element);
+	public synchronized void sendBufferMessage(DataBlock block){
+		bufferMessages.addLast(block);
 	}
 
-	public synchronized int getProcessorMessage(){
+	public synchronized DataBlock getProcessorMessage(){
 		return processorMessages.getFirst();
 	}
 
-	public synchronized int getBufferMessage(){
+	public synchronized DataBlock getBufferMessage(){
 		return bufferMessages.getFirst();
 	}
 }

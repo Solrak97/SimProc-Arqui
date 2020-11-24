@@ -25,11 +25,8 @@ public class VictimBuffer implements Runnable{
 
     @Override
     public void run() {
-		int i = 0;
 		messenger.setAvailableSpace(true);
-        while (i < 100){
-			i++;
-			
+        while (true){
 			endOfCycle();
         }
 		System.out.print("Total de ciclos en Buffer: " + cycleCounter + "\n\n" +
