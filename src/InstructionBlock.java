@@ -10,6 +10,5 @@ public class InstructionBlock extends Block{
 	InstructionBlock(){
 		super(-1, Status.I);
 		this.words = new int[2][4];
-		this.words = words;
 	}
 }

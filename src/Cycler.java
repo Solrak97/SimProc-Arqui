@@ -21,6 +21,18 @@ public class Cycler{
 		}
 	}
 
+
+	public void nonCountingCycle(){
+		try {
+			cycle.await();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (BrokenBarrierException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 	public int getCycles(){
 		return cycleCounter;
 	}

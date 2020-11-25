@@ -48,6 +48,7 @@ public class Processor implements Runnable{
 			for(int q = 0; q < quantum; q++){
 				if(!threadOver){
 					instruction = cache.loadInstruction(pc);
+					int data = cache.loadData(0);
 					decoder();
 					pc += 4;
 				}
@@ -83,124 +84,75 @@ public class Processor implements Runnable{
 
     }
 
-
-
-
-    void addi(int x1, int x2, int n){
-        x1 = x2 + n;
-    }
-
-    void add(int x1, int x2, int x3){
-        x1 = x2 + x3;
-    }
-
-    void sub(int x1, int x2, int x3){
-        x1 = x2 - x3;
-    }
-
-    void mul(int x1, int x2, int x3){
-        x1 = x2 * x3;
-    }
-
-    void div(int x1, int x2, int x3){
-        x1 = x2 / x3;
-    }
-
-    void lw(int x1, int x2, int n){
-        //Carga desde memoria y escribe en el Buffer
-        //x1 <-- M[n + x2]
-    }
-
-    void sw(int x1, int x2, int n){
-        //Guarda en Memoria el valor x1
-        //M[n + x2] <-- x1
-    }
-
-    void beq(int x1, int x2, int etiq){
-        if(x1 == x2){
-            pc += etiq * 4;
-        }
-    }
-
-    void bne(int x1, int x2, int etiq){
-        if(x1 != x2){
-            pc += etiq * 4;
-        }
-    }
-
-    void lr(int x1, int x2){
-        //x1 = M[x2];
-        rl = x2;
-    }
-
-    void sc(int x1, int x2, int n){
-            if(rl == (n + x2)){
-                //M(n + x2) = x1;
-            }else{
-                x1 = 0;
-            }
-    }
-
-    void jal(int x1, int n){
-        x1 = pc;
-        pc = pc + n;
-    }
-
-    void jalr(int x1, int x2, int n){
-        x1 = pc;
-        pc = x2 + n;
-    }
-
-    void fin(){
-		threadOver = true;
-        context.markAsInvalid();
-    }
-
-
-
     void decoder(){
+		//Para no hacer muy largas las cosas
+		int x1 = instruction[1];
+		int x2 = instruction[2];
+		int x3 = instruction[3];
+
         switch(instruction[0]){
-            case 19:
-                //addi(registros[instruccion[1]], registros[instruccion[2]], instruccion[3]);
+            case  5:	//lw
+			//Load
                 break;
-            case 71:
-                //add(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+
+            case 19:	//addi
+                //registers[x1] = registers[x2] + x3;
                 break;
-            case 83:
-                //sub(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+
+            case 37:	//sw
+			//sw
                 break;
-            case 72:
-                //mul(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+
+            case 51:	//lr
+                //Link
                 break;
-            case 56:
-                //div(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+
+            case 52:	//sc
+                //StoreCompare
                 break;
-            case 5:
-                //lw(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+
+
+            case 56:	//div
+				//registers[x1] = registers[x2] / registers[x3];
                 break;
-            case 37:
-                //sw(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+
+            case 71:	//add
+                //registers[x1] = registers[x2] + registers[x3];
                 break;
-            case 99:
-                //beq(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+
+            case 72:	//mul
+                //registers[x1] = registers[x2] * registers[x3];
                 break;
-            case 100:
-                //bne(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+
+            case 83:	//sub
+                //registers[x1] = registers[x2] - registers[x3];
                 break;
-            case 51:
-                //lr(registros[instruccion[1]], registros[instruccion[2]]);
+
+            case 99:	//beq
+                //if(registers[x1] == registers[x2]){
+				//	pc += x3 * 4;
+				//}
                 break;
-            case 52:
-                //sc(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
+
+            case 100:	//bne
+			if(registers[x1] != registers[x2]){
+				//pc += x3 * 4;
+			}
                 break;
-            case 111:
-                //jal(registros[instruccion[1]], registros[instruccion[3]]);
+
+            case 103:	//jalr
+                //registers[x1] = pc;
+				//pc = x2 + x3;
                 break;
-            case 183:
-                //jalr(registros[instruccion[1]], registros[instruccion[2]], registros[instruccion[3]]);
-                break;
-            case 999:
-                fin();
+
+            case 111:	//jal
+				//registers[x1] = pc;
+				//pc = pc + x3;
+				break;
+
+            case 999:	//fin
+				threadOver = true;
+				context.markAsInvalid();
                 break;
         }
     }

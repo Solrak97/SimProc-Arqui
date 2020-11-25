@@ -1,11 +1,14 @@
 public class DataBlock extends Block{
 	int words[];
 
-	DataBlock(int blockNum, int w1, int w2){
-		super(blockNum, Status.I);
-		words = new int[2];
-		words[1] = w1;
-		words[2] = w2;
+	DataBlock(int blockNum, int[] words){
+		super(blockNum, Status.C);
+		this.words = words;
+	}
+
+	DataBlock(){
+		super(-1, Status.I);
+		this.words = new int[2];
 	}
 
 }
