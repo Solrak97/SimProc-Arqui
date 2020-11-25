@@ -32,7 +32,7 @@ public class Simulation {
 		int memIndex = 0;
 
 		for(File f: threadFiles){
-			context.addContext(new Context(memIndex));
+			context.addContext(new Context(memIndex + 384));
 			try{
 				fr = new FileReader(f);
 				br = new BufferedReader(fr);

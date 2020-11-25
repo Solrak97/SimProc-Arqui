@@ -47,8 +47,11 @@ public class Processor implements Runnable{
 
 			for(int q = 0; q < quantum; q++){
 				if(!threadOver){
+					//System.out.println(pc);
 					instruction = cache.loadInstruction(pc);
-					//cache.storeData(0,0);
+					if(pc == 404){
+						sharedMemory.checkData();
+					}
 					decoder();
 					pc += 4;
 				}
@@ -80,79 +83,132 @@ public class Processor implements Runnable{
 		Thread.currentThread().interrupt();
 	}
 
-    public void fetch(){
+	void lw(int x1, int x2, int n){
+		registers[x1] = cache.loadData(n + registers[x2]);
+	}
 
-    }
+	void addi(int x1, int x2, int n){
+		registers[x1] = registers[x2] + n;
+	}
+
+	void sw(int x2, int x1, int n){
+		cache.storeData(registers[x1], n + registers[x2]);
+	}
+
+	void lr(int x1, int x2){
+		registers[x1] = cache.loadData(registers[x2]);
+		rl = registers[x2];
+	}
+
+	void sc(int x2, int x1, int n){
+		if(rl == (n + registers[x2])){
+			cache.storeData(registers[x1], n + registers[x2]);
+		}
+		else{
+			registers[x1] = 0;
+		}
+	}
+
+	void div(int x1, int x2, int x3){
+		registers[x1] = registers[x2] / registers[x3];
+	}
+
+	void add(int x1, int x2, int x3){
+		registers[x1] = registers[x2] + registers[x3];
+	}
+
+	void mul(int x1, int x2, int x3){
+		registers[x1] = registers[x2] * registers[x3];
+	}
+	void sub(int x1, int x2, int x3){
+		registers[x1] = registers[x2] - registers[x3];
+	}
+
+	void beq(int x1, int x2, int n){
+		if(registers[x1] == registers[x2]){
+			pc += n * 4;
+		}
+	}
+
+	void bne(int x1, int x2, int n){
+		if(registers[x1] != registers[x2]){
+			pc += n * 4;
+		}
+	}
+
+	void jalr(int x1, int x2, int n){
+		registers[x1] = pc;
+		pc = registers[x2] + n;
+	}
+
+	void jal(int x1, int n){
+		registers[x1] = pc;
+		pc = pc + n;
+	}
+
+	void fin(){
+		threadOver = true;
+		context.markAsInvalid();
+	}
 
     void decoder(){
 		//Para no hacer muy largas las cosas
-		int x1 = instruction[1];
-		int x2 = instruction[2];
-		int x3 = instruction[3];
 
         switch(instruction[0]){
             case  5:	//lw
-			//Load
+				lw(instruction[1], instruction[2], instruction[3]);
                 break;
 
             case 19:	//addi
-                //registers[x1] = registers[x2] + x3;
+                addi(instruction[1], instruction[2], instruction[3]);
                 break;
 
             case 37:	//sw
-			//sw
+				sw(instruction[1], instruction[2], instruction[3]);
                 break;
 
             case 51:	//lr
-                //Link
+                lr(instruction[1], instruction[2]);
                 break;
 
             case 52:	//sc
-                //StoreCompare
+				sc(instruction[1], instruction[2], instruction[3]);
                 break;
 
-
             case 56:	//div
-				//registers[x1] = registers[x2] / registers[x3];
+				div(instruction[1], instruction[2], instruction[3]);
                 break;
 
             case 71:	//add
-                //registers[x1] = registers[x2] + registers[x3];
+				add(instruction[1], instruction[2], instruction[3]);
                 break;
 
             case 72:	//mul
-                //registers[x1] = registers[x2] * registers[x3];
+                mul(instruction[1], instruction[2], instruction[3]);
                 break;
 
             case 83:	//sub
-                //registers[x1] = registers[x2] - registers[x3];
+                sub(instruction[1], instruction[2], instruction[3]);
                 break;
 
             case 99:	//beq
-                //if(registers[x1] == registers[x2]){
-				//	pc += x3 * 4;
-				//}
+				beq(instruction[1], instruction[2], instruction[3]);
                 break;
 
             case 100:	//bne
-			if(registers[x1] != registers[x2]){
-				//pc += x3 * 4;
-			}
+				bne(instruction[1], instruction[2], instruction[3]);
                 break;
 
             case 103:	//jalr
-                //registers[x1] = pc;
-				//pc = x2 + x3;
+				jalr(instruction[1], instruction[2], instruction[3]);
                 break;
 
             case 111:	//jal
-				//registers[x1] = pc;
-				//pc = pc + x3;
+				jal(instruction[1], instruction[3]);
 				break;
 
             case 999:	//fin
-				threadOver = true;
-				context.markAsInvalid();
+				fin();
                 break;
         }
     }

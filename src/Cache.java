@@ -72,12 +72,16 @@ public class Cache {
 //en caso de darse unb fallo de cache, carga el bloque de memoria asociado en el cache
 //y luego devuelve el dato requerido
 	public int[] loadInstruction(int address){
+
+		//Era necesario que la primer posicion de memoria para instruccion fuera 384
+		//Incluso cuando 2 vectores son separados, es asi por instruccion nada más
+		address = address - 384;
 		int blockNum = blockAddress(address, 8);
 		int cacheAddress = blockNum % 8;
 
 		//Fallo de cache, como es por asociacon directa y de lectura, solo es necesario
 		//Revisar la direccion
-		if((blockNum != instructionCache[cacheAddress].blockNum){
+		if((blockNum != instructionCache[cacheAddress].blockNum)){
 			instructionCache[cacheAddress] = getInstructionBlockFromMemory(blockNum);
 		}
 		int wordNum = wordNumber(address, 8) / 4;
@@ -125,26 +129,43 @@ public class Cache {
 		return index;
 	}
 
-/*
+
 	public int loadData(int address){
+		address = address / 4;
 		int blockNum = blockAddress(address, 2);
 		int set = blockNum % 2;
 		int blockIndex = getBlockIndex(blockNum, set);
+
+		/*
 
 		//Fallo de cache
 		if(blockIndex == -1 || dataCache[set][blockIndex].status != DataBlock.Status.C ){
-			blockIndex = getLessUsed(set);
+			//blockIndex = getLessUsed(set);
 			dataCache[set][blockIndex] = getDataBlockFromMemory(blockNum);
 		}
-		return dataCache[set][blockIndex].words[wordNumber(address, 2)];
+
+		*/
+
+		//Prueba
+
+		return sharedMemory.dataMemory[address];
+
+		//
+
+
+		//return dataCache[set][blockIndex].words[wordNumber(address, 2)];
 	}
 
-*/
-
 	public void storeData(int value, int address){
+		System.out.println("address: " + address);
+		address = address / 4;
+		System.out.println("address 2: " + address);
 		int blockNum = blockAddress(address, 2);
 		int set = blockNum % 2;
 		int blockIndex = getBlockIndex(blockNum, set);
+
+
+		/*
 
 		//Se da un fallo de cache cuando el bloque no se encuentra
 		if(blockIndex == -1 || dataCache[set][blockIndex].status != DataBlock.Status.I ){
@@ -155,12 +176,16 @@ public class Cache {
 			if(da1taCache[set][blockIndex].status == Block.Status.M){
 				messenger.sendProcessorMessage(dataCache[set][blockIndex]);
 			}
-			
+
 			//Asigna el bloque obtenido en el fallo de cache
 			dataCache[set][blockIndex] = cacheFailure(blockNum);
 		}
 		dataCache[set][blockIndex].words[wordNumber(address, 2)] = value;
 		dataCache[set][blockIndex].status = Block.Status.M;
+
+		*/
+
+		sharedMemory.dataMemory[address] = value;
 	}
 
 	DataBlock cacheFailure(int blockNum){
@@ -194,51 +219,4 @@ public class Cache {
 		return block;
 	}
 
-
-
-/*
-
-	// storeData
-	void cacheWhenStore(int wordNumber1, int wordNumber2, int blockNumber, boolean failureStatus){
-		if(!failureStatus){
-			this.w1 = wordNumber1;
-			this.w2 = wordNumber2;
-			this.status = Status.C;
-		}
-	}
-
-	//modifyData
-	void cacheWhenModification(int wordNumber1, int wordNumber2, int blockNumber, boolean failureStatus){
-		if(!failureStatus){
-			this.w1 = wordNumber1;
-			this.w2 = wordNumber2;
-			this.status = Status.M;
-		}
-	}
-
-	boolean cacheFailure(){
-		return(this.status == "I");
-	}
-
-	boolean getWord(int word){
-		return(true); //(this.__ )
-	}
-
-
-	InstructionBlock getInstructionBlockFromMemory(int memoryAddress, int blockNumber){
-		copyMemoryWait();
-		int initialIndex = blockNumber * 8;
-		int words[][] = new int[2][4];
-		for(int i = 0; i < 2; i++){
-			for(int j = 0; j < 4; j++){
-				words[i][j] = sharedMemory.instructionMemory[initialIndex++];
-			}
-		}
-		return new InstructionBlock(blockNumber, words);
-	}
-
-    int blockAddress(int memoryAddress, int blockSize){
-      return(memoryAddress / blockSize);
-    }
-*/
 }
