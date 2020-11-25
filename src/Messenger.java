@@ -6,12 +6,19 @@ public class Messenger{
 	boolean isOver;
 	LinkedList<DataBlock> processorMessages;
 	LinkedList<DataBlock> bufferMessages;
+	boolean lookupAsk;
+	int blockNumberAsk;
+	boolean lookupResponse;
+	DataBlock lookupBlock;
 
 
 	public Messenger(){
 		availableSpace = false;
 		isBussy = false;
 		isOver = false;
+		lookupAsk = false;
+		lookupResponse = false;
+		blockNumberAsk = 0;
 		bufferMessages = new LinkedList<DataBlock>();
 		processorMessages = new LinkedList<DataBlock>();
 	}

@@ -48,7 +48,7 @@ public class Processor implements Runnable{
 			for(int q = 0; q < quantum; q++){
 				if(!threadOver){
 					instruction = cache.loadInstruction(pc);
-					int data = cache.loadData(0);
+					//cache.storeData(0,0);
 					decoder();
 					pc += 4;
 				}

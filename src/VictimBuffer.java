@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.concurrent.CyclicBarrier;
 import java.util.*;
 
@@ -6,24 +7,23 @@ public class VictimBuffer implements Runnable{
 
 	//Simulation stats
 	Cycler cycler;
-
-    LinkedList<Integer> ourBuffer = new LinkedList<Integer>();
-    int numberOfBlocksInBuffer;
-    private int word1;
-    private int word2;
+	ArrayList<DataBlock> buffer;
 
     /*
     *   This is the Buffer Constructor
     */
+
     public VictimBuffer(CyclicBarrier cycle, Messenger messenger){
         this.cycler = new Cycler(cycle);
 		this.messenger = messenger;
+		buffer = new ArrayList<DataBlock>();
     }
 
     @Override
     public void run() {
 		messenger.setAvailableSpace(true);
         while (!messenger.isOver()){
+			responseForBlockInBuffer();
 			cycler.nextCycle();
         }
 
@@ -33,15 +33,24 @@ public class VictimBuffer implements Runnable{
 		"______________________________________________________\n\n\n");
     }
 
+	DataBlock lookup(int blockNumber){
+		DataBlock block = new DataBlock();
+		for(int i = 0; i < buffer.size(); i++){
+			if(buffer.get(i).blockNum == blockNumber){
+				block = buffer.get(i);
+				buffer.remove(i);
+			}
+		}
+		return block;
+	}
+
 	void finishExecution(){
 		Thread.currentThread().interrupt();
 	}
 
 
     /*
-    *   Insertamos bloque de dos palabras (mientras aún haya espacio)
-    */
-    void insertInVictimBuffer(int newBlock){    //DUDA CON LUISK DE COMO IMPLEMENTÓ LA CLASE BLOQUE PARA EL INSER EN EL BUFFER
+	void insertInVictimBuffer(int newBlock){    //DUDA CON LUISK DE COMO IMPLEMENTÓ LA CLASE BLOQUE PARA EL INSER EN EL BUFFER
         if(8 > numberOfBlocksInBuffer){
             ourBuffer.addLast(newBlock);
             ++numberOfBlocksInBuffer;
@@ -49,8 +58,7 @@ public class VictimBuffer implements Runnable{
     }
 
     /*
-    *   Extraemos bloque de dos palabras (mientras se pueda extraer)
-    */
+
     void extractFromVictimBuffer(){
         if(0 < numberOfBlocksInBuffer){
             ourBuffer.removeFirst();
@@ -58,5 +66,21 @@ public class VictimBuffer implements Runnable{
         }
     }
 
+    */
 
+	void responseForBlockInBuffer(){
+		if (messenger.lookupAsk){
+			cycler.nonCountingCycle();
+			DataBlock block = new DataBlock();
+			block = lookup(messenger.blockNumberAsk);
+			messenger.lookupAsk = false;
+
+			if (block.status != Block.Status.I){
+				block.status = Block.Status.C;
+				messenger.lookupResponse = true;
+			}
+			cycler.nonCountingCycle();
+					messenger.lookupBlock = block;
+		}
+	}
 }

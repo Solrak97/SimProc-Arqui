@@ -75,8 +75,9 @@ public class Cache {
 		int blockNum = blockAddress(address, 8);
 		int cacheAddress = blockNum % 8;
 
-		//Fallo de cache
-		if((blockNum != instructionCache[cacheAddress].blockNum) || (instructionCache[cacheAddress].status != Block.Status.C)){
+		//Fallo de cache, como es por asociacon directa y de lectura, solo es necesario
+		//Revisar la direccion
+		if((blockNum != instructionCache[cacheAddress].blockNum){
 			instructionCache[cacheAddress] = getInstructionBlockFromMemory(blockNum);
 		}
 		int wordNum = wordNumber(address, 8) / 4;
@@ -124,7 +125,7 @@ public class Cache {
 		return index;
 	}
 
-
+/*
 	public int loadData(int address){
 		int blockNum = blockAddress(address, 2);
 		int set = blockNum % 2;
@@ -132,20 +133,70 @@ public class Cache {
 
 		//Fallo de cache
 		if(blockIndex == -1 || dataCache[set][blockIndex].status != DataBlock.Status.C ){
-
+			blockIndex = getLessUsed(set);
+			dataCache[set][blockIndex] = getDataBlockFromMemory(blockNum);
 		}
-
-		
-		return 0;
+		return dataCache[set][blockIndex].words[wordNumber(address, 2)];
 	}
+
+*/
+
+	public void storeData(int value, int address){
+		int blockNum = blockAddress(address, 2);
+		int set = blockNum % 2;
+		int blockIndex = getBlockIndex(blockNum, set);
+
+		//Se da un fallo de cache cuando el bloque no se encuentra
+		if(blockIndex == -1 || dataCache[set][blockIndex].status != DataBlock.Status.I ){
+			blockIndex = getLessUsed(set);
+			dataMap[set][blockIndex]++;
+
+			//Si el bloque de memoria a reemplazar fue modificado, este se pasa al buffer victima
+			if(da1taCache[set][blockIndex].status == Block.Status.M){
+				messenger.sendProcessorMessage(dataCache[set][blockIndex]);
+			}
+			
+			//Asigna el bloque obtenido en el fallo de cache
+			dataCache[set][blockIndex] = cacheFailure(blockNum);
+		}
+		dataCache[set][blockIndex].words[wordNumber(address, 2)] = value;
+		dataCache[set][blockIndex].status = Block.Status.M;
+	}
+
+	DataBlock cacheFailure(int blockNum){
+		DataBlock block = askForBlockInBuffer(blockNum);
+		if (block.status == Block.Status.I){
+			block = getDataBlockFromMemory(blockNum);
+		}
+		return block;
+	}
+
+	DataBlock getDataBlockFromMemory(int blockNumber){
+		copyMemoryWait();
+		int initialIndex = blockNumber * 2;
+		int words[] = new int[2];
+		for(int i = 0; i < 2; i++){
+			words[i] = sharedMemory.dataMemory[initialIndex++];
+		}
+		return new DataBlock(blockNumber, words);
+	}
+
+	DataBlock askForBlockInBuffer(int blockNum){
+		DataBlock block = new DataBlock();
+		messenger.lookupAsk = true;
+		messenger.lookupResponse = false;
+		messenger.blockNumberAsk = blockNum;
+		cycler.nonCountingCycle();
+		cycler.nonCountingCycle();
+		if(messenger.lookupResponse){
+			block = messenger.lookupBlock;
+		}
+		return block;
+	}
+
+
 
 /*
-
-
-	public void storeData(){
-
-	}
-
 
 	// storeData
 	void cacheWhenStore(int wordNumber1, int wordNumber2, int blockNumber, boolean failureStatus){
