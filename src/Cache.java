@@ -13,28 +13,28 @@ public class Cache {
 	Memory sharedMemory;
 	Messenger messenger;
 
-
+  //VictimBuffer buffer;
 
 
     public Cache(Memory sharedMemory, Messenger messenger, Cycler cycler){
-		this.cycler = cycler;
+			this.cycler = cycler;
 
-		dataCache = new DataBlock[2][2];
-		dataMap = new int[2][2];
-		for(int i = 0; i < 2; i++){
-			for(int j = 0; j < 2; j++){
-				dataCache[i][j] = new DataBlock();
+			dataCache = new DataBlock[2][2];
+			dataMap = new int[2][2];
+			for(int i = 0; i < 2; i++){
+				for(int j = 0; j < 2; j++){
+					dataCache[i][j] = new DataBlock();
+				}
 			}
-		}
 
 
-		instructionCache = new InstructionBlock[8];
-		for(int i = 0; i < instructionCache.length; i++){
-			instructionCache[i] = new InstructionBlock();
-		}
+			instructionCache = new InstructionBlock[8];
+			for(int i = 0; i < instructionCache.length; i++){
+				instructionCache[i] = new InstructionBlock();
+			}
 
-		this.sharedMemory = sharedMemory;
-		this.messenger = messenger;
+			this.sharedMemory = sharedMemory;
+			this.messenger = messenger;
     }
 
 
@@ -61,6 +61,7 @@ public class Cache {
 	  return(memoryAddress / blockSize);
 	}
 
+//
 	public int wordNumber(int address, int size){
 		return address % size;
 	}
@@ -137,13 +138,11 @@ public class Cache {
 		int blockIndex = getBlockIndex(blockNum, set);
 
 		/*
-
 		//Fallo de cache
 		if(blockIndex == -1 || dataCache[set][blockIndex].status != DataBlock.Status.C ){
 			//blockIndex = getLessUsed(set);
 			dataCache[set][blockIndex] = getDataBlockFromMemory(blockNum);
 		}
-
 		*/
 
 		//Prueba
@@ -155,6 +154,18 @@ public class Cache {
 
 		//return dataCache[set][blockIndex].words[wordNumber(address, 2)];
 	}
+
+	/*
+	*	*****************************************************
+	*/
+void writeInBuffer(int blockNum){
+	DataBlock block = askForBlockInBuffer(blockNum);
+	if(block.status == Block.Status.M){
+		block = getDataBlockFromMemory(blockNum);
+		messenger.sendBufferMessage(block);
+	}
+}
+
 
 	public void storeData(int value, int address){
 		System.out.println("address: " + address);

@@ -45,7 +45,7 @@ public class Messenger{
 
 	public synchronized void sendBufferMessage(DataBlock block){
 		bufferMessages.addLast(block);
-	}
+	} //*****************
 
 	public synchronized DataBlock getProcessorMessage(){
 		return processorMessages.getFirst();

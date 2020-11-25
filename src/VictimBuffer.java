@@ -14,18 +14,18 @@ public class VictimBuffer implements Runnable{
     */
 
     public VictimBuffer(CyclicBarrier cycle, Messenger messenger){
-        this.cycler = new Cycler(cycle);
-		this.messenger = messenger;
-		buffer = new ArrayList<DataBlock>();
+			this.cycler = new Cycler(cycle);
+			this.messenger = messenger;
+			buffer = new ArrayList<DataBlock>();
     }
 
     @Override
     public void run() {
-		messenger.setAvailableSpace(true);
-        while (!messenger.isOver()){
-			responseForBlockInBuffer();
-			cycler.nextCycle();
-        }
+			messenger.setAvailableSpace(true);
+      while (!messenger.isOver()){
+				responseForBlockInBuffer();
+				cycler.nextCycle();
+      }
 
 		finishExecution();
 
@@ -48,25 +48,23 @@ public class VictimBuffer implements Runnable{
 		Thread.currentThread().interrupt();
 	}
 
-
-    /*
-	void insertInVictimBuffer(int newBlock){    //DUDA CON LUISK DE COMO IMPLEMENTÓ LA CLASE BLOQUE PARA EL INSER EN EL BUFFER
-        if(8 > numberOfBlocksInBuffer){
-            ourBuffer.addLast(newBlock);
-            ++numberOfBlocksInBuffer;
+	/*
+	*
+	*/
+	void insertInVictimBuffer(DataBlock newBlock){    //DUDA
+				if((8 > buffer.size()) && (!buffer.contains(newBlock))){
+            buffer.add(newBlock);
         }
-    }
+  }
 
-    /*
-
+		/*
+		*
     void extractFromVictimBuffer(){
-        if(0 < numberOfBlocksInBuffer){
-            ourBuffer.removeFirst();
-            --numberOfBlocksInBuffer;
+        if(0 < buffer.size()){
+            buffer.remove(0);
         }
     }
-
-    */
+		*/
 
 	void responseForBlockInBuffer(){
 		if (messenger.lookupAsk){
